@@ -5,7 +5,7 @@ each time an entity of `Comment` type is created, then you need to do the follow
 ### Step 1
 Create a Notification entity that extends from `BaseNotification`:<br>
 
-```
+```php
 <?php
 
 namespace YourBundle\Entity;
@@ -49,7 +49,7 @@ Make sure your entity implements `\JsonSerializable` so it can be converted to `
 
 ### Step 2
 Now create your `Comment` entity:<br>
-```
+```php
 <?php
 
 namespace YourBundle\Entity;
