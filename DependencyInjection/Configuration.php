@@ -30,6 +30,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('app_id')->end()
                 ->scalarNode('app_key')->end()
                 ->scalarNode('app_secret')->end()
+                ->booleanNode('encrypted')
+                    ->defaultFalse()
+                ->end()
             ->end()
         ;
 

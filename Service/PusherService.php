@@ -41,7 +41,7 @@ class PusherService
         $parameters = $this->container->getParameter(Configuration::CONFIGURATION_NAME);
         $options = array(
             'cluster' => $parameters['cluster'],
-            'encrypted' => true
+            'encrypted' => $parameters['encrypted']
         );
 
         $this->pusher = new Pusher(
