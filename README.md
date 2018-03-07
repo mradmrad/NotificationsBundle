@@ -23,12 +23,16 @@ notifications:
     app_key:    your_key
     app_secret: secret
     cluster:    cluster
+    # Optional
+    # Default false: work without ssl encryption
+    # Set it to true to work with ssl encryption
+    encrypted:  false
 ```
 Of course you can find those details in your app in the dashboard.
 
 ### Step 3:
 Now in your `view.html.twig` (your client side) add this:
-```
+```javascript
 {# Call NotificationsBundles's assets #}
 {{ notifications_assets() }}
 <script>
@@ -47,15 +51,16 @@ And that's it :smiley:, now to make sure that your client is receiving the data 
 console command:<br>
 `php bin/console notifications:trigger "Your message"`<br>
 If you open the browser's console you should see something like this:<br>
-[alt text](Resources/docs/images/browser_console.png)
+![alt text](Resources/docs/images/browser_console.png)
 
-#### Broadcast custom messages from Backend
+### Broadcast custom messages from Backend
 To broadcast messages from your backend you can simply do this:
-```
+```php
+// From your controller or service
 $data = array(
     'my-message' => "My custom message",
 );
-$pusher = $this->getContainer()->get('mrad.pusher.notificaitons');
+$pusher = $this->get('mrad.pusher.notificaitons');
 $pusher->trigger($data);
 ```
 
