@@ -1,0 +1,41 @@
+{
+  "name" : "mrad/notifications-bundle",
+  "description" : "Implement notifications system in your symfony project using Pusher API",
+  "type" : "symfony-bundle",
+  "authors" : [
+    {
+    "name" : "Haithem Mrad",
+    "email" : "haithem.mrad@sbc.tn"
+    },
+    {
+      "name" : "Slimen Arnaout",
+      "email" : "arnaout.slimen@gmail.com"
+    }
+  ],
+  "keywords" : [
+    "notificaiton bundle",
+    "symfony notifications",
+    "pusher"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "require" : {
+    "php": ">=5.5.9",
+    "symfony/framework-bundle": "^2.8 || ^3.0",
+    "pusher/pusher-php-server": "^3.0"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "SBC\\NotificationsBundle" : ""
+    }
+  },
+  "target-dir" : "SBC/NotificationsBundle",
+  "repositories" : [{
+  }],
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "1-dev"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+services:
+    history.service:
+        class: SBC\NotificationsBundle\EventListener\HistoryService
+        arguments: ['@service_container']
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    mrad.pusher.notificaitons:
+        class: SBC\NotificationsBundle\Service\PusherService
+        arguments: ['@service_container']
+
+    notifications.assets.extension:
+        class: SBC\NotificationsBundle\Twig\NotificationsAssetsExtension
+        arguments: ['@service_container']
+        public: true
+        tags:
+            - { name: twig.extension }
