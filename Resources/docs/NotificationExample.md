@@ -117,18 +117,38 @@ class Comment implements NotifiableInterface, \JsonSerializable
         return $this->content;
     }
 
-    public function buildNotifications(NotificationBuilder $builder)
+     public function notificationsOnCreate(NotificationBuilder $builder)
     {
         $notification = new Notification();
         $notification
-            ->setTitle('New Comment')
-            ->setDescription('Someone commented on your post "'.$this->getContent().'"')
+            ->setTitle('New comment')
+            ->setDescription('New comment has been added "'.$this->content.'"')
+            ->setRoute('comment_show')// I suppose you have a show route for your entity
+            ->setParameters(array('id' => $this->id))
         ;
+        $builder->addNotification($notification);
 
-        $builder
-            ->addNotification($notification)
+        return $builder;
+    }
+
+    public function notificationsOnUpdate(NotificationBuilder $builder)
+    {
+        $notification = new Notification();
+        $notification
+            ->setTitle('Comment updated')
+            ->setDescription('"'.$this->content.'" has been updated')
+            ->setRoute('comment_show')
+            ->setParameters(array('id' => $this->id))
         ;
+        $builder->addNotification($notification);
 
+        return $builder;
+    }
+
+    public function notificationsOnDelete(NotificationBuilder $builder)
+    {
+        // in case you don't want any notification for a special event
+        // you can simply return an empty $builder
         return $builder;
     }
 
@@ -142,13 +162,18 @@ class Comment implements NotifiableInterface, \JsonSerializable
 
 
 ```
-As you can see your entity must implements `NotificableInterface` interface that will provides you `buildNotifications(NotificationBuilder $builder)` function.<br>
-In this function you create your `Notification` object (or many) and give it to the `NotificationBuilder` object<br>
+As you can see your entity must implements `NotificableInterface` interface that will provides 3 methods :
+* `notificationsOnCreate(NotificationBuilder $builder)` will be triggered when the entity has been created.
+* `notificationsOnUpdate(NotificationBuilder $builder)` will be triggered when the entity has been updated.
+* `notificationsOnDelete(NotificationBuilder $builder)` will be triggered when the entity has been deleted.
+
+In each function you can create a `Notification` object (or many) and give it to the `NotificationBuilder` object<br>
+In case you do not want a notification for a specific event you can just return an empty $builder (as mentioned in the `notificationsOnDelete` function)
 
 ### Step 3
 Make sure to update your database schema by calling:<br>
 `php bin/console doctrine:schema:update --force`
 
 ### That's it
-Now when your `Comment` entity will be persisted a Listener will be triggered and broadcast your notifications to the client
+Now when your `Comment` entity will be persisted, updated or deleted a Listener will be triggered and broadcast your notifications to the client
 where you can catch it in the `onNotificationsPushed(data)` function in your view.

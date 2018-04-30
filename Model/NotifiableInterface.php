@@ -1,6 +1,7 @@
 <?php
 namespace SBC\NotificationsBundle\Model;
 use SBC\NotificationsBundle\Builder\NotificationBuilder;
+use Symfony\Component\Routing\RouterInterface;
 
 
 /**
@@ -12,10 +13,25 @@ use SBC\NotificationsBundle\Builder\NotificationBuilder;
  */
 interface NotifiableInterface
 {
-
     /**
+     * Build notifications on entity creation
      * @param NotificationBuilder $builder
      * @return NotificationBuilder
      */
-    public function buildNotifications(NotificationBuilder $builder);
+    public function notificationsOnCreate(NotificationBuilder $builder);
+
+    /**
+     * Build notifications on entity update
+     * @param NotificationBuilder $builder
+     * @return NotificationBuilder
+     */
+    public function notificationsOnUpdate(NotificationBuilder $builder);
+
+    /**
+     * Build notifications on entity delete
+     * @param NotificationBuilder $builder
+     * @return NotificationBuilder
+     */
+    public function notificationsOnDelete(NotificationBuilder $builder);
+
 }

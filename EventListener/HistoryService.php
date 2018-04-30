@@ -30,6 +30,8 @@ class HistoryService implements EventSubscriber
     {
         return array(
             'postPersist',
+            'postUpdate',
+            'postRemove',
         );
     }
     
@@ -43,8 +45,70 @@ class HistoryService implements EventSubscriber
         {
 
             $builder = new NotificationBuilder();
-            $builder =  $entity->buildNotifications($builder);
+            $builder =  $entity->notificationsOnCreate($builder);
             
+            if($builder == null || !$builder instanceof NotificationBuilder){
+                throw new RuntimeException('"buildNotifications()" must return an instance of "SBC\NotificationsBundle\Builder\NotificationBuilder" !');
+            }else{
+                if(!$builder->isEmpty()){
+
+                    foreach ($builder->getNotifications() as $notification){
+                        // if notification contain route build full URL
+                        $notification = $this->buildFullURL($notification);
+                        $entityManager->persist($notification);
+                    }
+
+                    $entityManager->flush();
+                    $this->broadcastDataToClient($builder->getNotifications());
+
+                }
+            }
+        }
+
+    }
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+        $entityManager = $args->getEntityManager();
+
+        if ($entity instanceof NotifiableInterface )
+        {
+
+            $builder = new NotificationBuilder();
+            $builder =  $entity->notificationsOnUpdate($builder);
+
+            if($builder == null || !$builder instanceof NotificationBuilder){
+                throw new RuntimeException('"buildNotifications()" must return an instance of "SBC\NotificationsBundle\Builder\NotificationBuilder" !');
+            }else{
+                if(!$builder->isEmpty()){
+
+                    foreach ($builder->getNotifications() as $notification){
+                        // if notification contain route build full URL
+                        $notification = $this->buildFullURL($notification);
+                        $entityManager->persist($notification);
+                    }
+
+                    $entityManager->flush();
+                    $this->broadcastDataToClient($builder->getNotifications());
+
+                }
+            }
+        }
+    }
+
+    public function postRemove(LifecycleEventArgs $args)
+    {
+
+        $entity = $args->getEntity();
+        $entityManager = $args->getEntityManager();
+
+        if ($entity instanceof NotifiableInterface )
+        {
+
+            $builder = new NotificationBuilder();
+            $builder =  $entity->notificationsOnDelete($builder);
+
             if($builder == null || !$builder instanceof NotificationBuilder){
                 throw new RuntimeException('"buildNotifications()" must return an instance of "SBC\NotificationsBundle\Builder\NotificationBuilder" !');
             }else{
