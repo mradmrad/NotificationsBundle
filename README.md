@@ -73,5 +73,8 @@ Now I will show how to create and save notifications in database.
 ### License
 This project is under the [MIT license](LICENSE)
 
+### Videos
+You can check this [playlist](https://www.youtube.com/watch?v=ajKTAfr1yVI&list=PLjv8CqUmMuKw9AsRL2dQH-JjQaFaIofL2) for more details about how This bundle works.
+
 ### Thanks
 Thanks to [SlimenTN](https://github.com/SlimenTN) for his help in this project
