@@ -54,7 +54,7 @@ class HistoryService implements EventSubscriber
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
                         // $notification = $this->buildFullURL($notification);
-                        $entityManager->persist($notification);
+                        if($notification instanceof BaseNotification) $entityManager->persist($notification);
                     }
 
                     $entityManager->flush();
@@ -85,7 +85,7 @@ class HistoryService implements EventSubscriber
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
                         // $notification = $this->buildFullURL($notification);
-                        $entityManager->persist($notification);
+                        if($notification instanceof BaseNotification) $entityManager->persist($notification);
                     }
 
                     $entityManager->flush();
@@ -116,7 +116,7 @@ class HistoryService implements EventSubscriber
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
                         // $notification = $this->buildFullURL($notification);
-                        $entityManager->persist($notification);
+                        if($notification instanceof BaseNotification) $entityManager->persist($notification);
                     }
 
                     $entityManager->flush();
