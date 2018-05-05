@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use Pusher\Pusher;
 use SBC\NotificationsBundle\DependencyInjection\Configuration;
 use SBC\NotificationsBundle\Logger\PusherLogger;
+use SBC\NotificationsBundle\Model\BaseNotification;
 
 /**
  * Class PusherService
@@ -53,7 +54,44 @@ class PusherService
     }
     
     public function trigger($data){
+        
+        // check if we have a BaseNotification objects
+        // so we can build the fullUrl attribute
+        if($data instanceof BaseNotification){
+            $data = $this->buildFullURL($data);
+        }
+        
+        else if(is_array($data)){
+            foreach ($data as $key => $item){
+                if($data instanceof BaseNotification){
+                    $data[$key] = $this->buildFullURL($item);
+                }
+            }
+        }
+        
+        // broadcast data
         $this->pusher->trigger('my-channel', 'my-event', $data);
+    }
+
+    /**
+     * @param BaseNotification $notification
+     * @return BaseNotification
+     */
+    private function buildFullURL(BaseNotification $notification){
+        if($notification->getRoute() != null && $notification->getRoute() != ''){
+            if($notification->getParameters() != null){
+                $fullUr = $this->container
+                    ->get('router')
+                    ->generate($notification->getRoute(), $notification->getParameters());
+            }else{
+                $fullUr = $this->container
+                    ->get('router')
+                    ->generate($notification->getRoute());
+            }
+            $notification->setFullUrl($fullUr);
+        }
+
+        return $notification;
     }
     
     public function dumpConfiguration(){

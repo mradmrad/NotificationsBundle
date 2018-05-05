@@ -59,18 +59,21 @@ abstract class BaseNotification
     protected $date;
 
     /**
-     * @var string
-     * 
-     * @ORM\Column(name="full_url", type="string", length=255, nullable=true)
-     */
-    protected $fullUrl;
-
-    /**
      * @var bool
      * 
      * @ORM\Column(name="seen", type="boolean")
      */
     protected $seen;
+
+    /**
+     * @var string
+     *
+     * This attribute will be filled automatically when we broadcast the notification
+     * (exactly when we call the trigger() function of the notification service 'mrad.pusher.notifications')
+     * if the route parameter is not empty the bundle will generate a full url out of it
+     * so we can use it in javascript
+     */
+    protected $fullUrl;
 
     public function __construct()
     {

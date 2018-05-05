@@ -40,9 +40,8 @@ class HistoryService implements EventSubscriber
 
         $entity = $args->getEntity();
         $entityManager = $args->getEntityManager();
-        
-        if ($entity instanceof NotifiableInterface )
-        {
+
+        if ($entity instanceof NotifiableInterface ){
 
             $builder = new NotificationBuilder();
             $builder =  $entity->notificationsOnCreate($builder);
@@ -54,7 +53,7 @@ class HistoryService implements EventSubscriber
 
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
-                        $notification = $this->buildFullURL($notification);
+                        // $notification = $this->buildFullURL($notification);
                         $entityManager->persist($notification);
                     }
 
@@ -85,7 +84,7 @@ class HistoryService implements EventSubscriber
 
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
-                        $notification = $this->buildFullURL($notification);
+                        // $notification = $this->buildFullURL($notification);
                         $entityManager->persist($notification);
                     }
 
@@ -116,7 +115,7 @@ class HistoryService implements EventSubscriber
 
                     foreach ($builder->getNotifications() as $notification){
                         // if notification contain route build full URL
-                        $notification = $this->buildFullURL($notification);
+                        // $notification = $this->buildFullURL($notification);
                         $entityManager->persist($notification);
                     }
 
@@ -127,27 +126,6 @@ class HistoryService implements EventSubscriber
             }
         }
 
-    }
-
-    /**
-     * @param BaseNotification $notification
-     * @return BaseNotification
-     */
-    private function buildFullURL(BaseNotification $notification){
-        if($notification->getRoute() != null && $notification->getRoute() != ''){
-            if($notification->getParameters() != null){
-                $fullUr = $this->container
-                    ->get('router')
-                    ->generate($notification->getRoute(), $notification->getParameters());
-            }else{
-                $fullUr = $this->container
-                    ->get('router')
-                    ->generate($notification->getRoute());
-            }
-            $notification->setFullUrl($fullUr);
-        }
-
-        return $notification;
     }
 
     /**
