@@ -9,8 +9,8 @@
 namespace SBC\NotificationsBundle\Twig;
 
 
-use Psr\Container\ContainerInterface;
 use SBC\NotificationsBundle\DependencyInjection\Configuration;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Render needed assets for pusher to work
