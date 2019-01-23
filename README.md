@@ -33,24 +33,31 @@ Of course you can find those details in your app in the dashboard.<br>
 
 ### Step 3:
 Now in your `view.html.twig` (your client side) add this:
-```
+```javascript
 {# Call NotificationsBundles's assets #}
 {{ notifications_assets() }}
 <script>
     /**
-     * This function will be triggered each time a data comes from the server
-     * Make sure you call it otherwise you won't get any data
-     * @param data contains your data sent from the server
-     */
-    function onNotificationsPushed(data){
-        console.log('data', data);
-    }
+    * After calling notifications_assets() "pusher" is now available
+    * and you can use it this way
+    */
+
+    // select the channel you want to listen to
+    var channel = pusher.subscribe("notifications");// notifications channel
+    channel.bind("my-event", function(data) {
+        console.log('from notifications channel', data);
+    });
+
+    var channel = pusher.subscribe("messages");// messages channel
+    channel.bind("my-event", function(data) {
+        console.log('from messages channel', data);
+    });
 </script>
 ```
 
 And that's it :smiley:, now to make sure that your client is receiving the data correctly you can test it by calling this
 console command:<br>
-`php bin/console notifications:trigger "Your message"`<br>
+`php bin/console notifications:trigger "Your message" "channel"`<br>
 If you open the browser's console you should see something like this:<br>
 ![alt text](Resources/docs/images/browser_console.png)
 
@@ -62,6 +69,10 @@ $data = array(
     'my-message' => "My custom message",
 );
 $pusher = $this->get('mrad.pusher.notificaitons');
+$channel = 'messages';
+$pusher->trigger($data, $channel);
+
+// or you can keep the channel pram empty and will be broadcasted on "notifications" channel by default
 $pusher->trigger($data);
 ```
 
