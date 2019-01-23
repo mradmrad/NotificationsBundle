@@ -24,6 +24,7 @@ class PusherTestCommand extends ContainerAwareCommand
             ->setName('notifications:trigger')
             ->setDescription('Test Notifications Bundle with a simple message and display debug message')
             ->addArgument('message', InputArgument::OPTIONAL, 'Your message that you want to push to client (optional)')
+            ->addArgument('channel', InputArgument::OPTIONAL, 'Channel where you want to push this message (optional)')
             ->addOption('option', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
@@ -32,7 +33,7 @@ class PusherTestCommand extends ContainerAwareCommand
     {
         $output->writeln('Pushing message ...');
         $message = $input->getArgument('message');
-
+        $channel = $input->getArgument('channel');
         if ($input->getOption('option')) {
             // ...
         }
@@ -42,7 +43,10 @@ class PusherTestCommand extends ContainerAwareCommand
         );
         $pusher = $this->getContainer()->get('mrad.pusher.notificaitons');
         $pusher->enableLogger();
-        $pusher->trigger($data);
+        if($channel != '')
+            $pusher->trigger($data, $channel);
+        else
+            $pusher->trigger($data);
 
         $output->writeln('Complete.');
     }

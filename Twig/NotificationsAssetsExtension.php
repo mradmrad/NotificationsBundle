@@ -40,20 +40,19 @@ class NotificationsAssetsExtension extends \Twig_Extension
 
     public function renderAssets(){
         $parameters = $this->container->getParameter(Configuration::CONFIGURATION_NAME);
+        $pusherLog = '';
+
+        if($this->container->get('kernel')->getEnvironment() == 'dev'){
+            $pusherLog = 'Pusher.logToConsole = true;';
+        }
         $assets = '
-            <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+            <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
             <script>
-            // Enable pusher logging - don\'t include this in production
-                Pusher.logToConsole = true;
+                '.$pusherLog.'
             
                 var pusher = new Pusher("'.$parameters['app_key'].'", {
                     cluster: "'.$parameters['cluster'].'",
                     encrypted: true
-                });
-                
-                var channel = pusher.subscribe("my-channel");
-                channel.bind("my-event", function(data) {
-                    onNotificationsPushed(data);
                 });
             </script>
         ';

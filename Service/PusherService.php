@@ -53,7 +53,7 @@ class PusherService
         );
     }
     
-    public function trigger($data){
+    public function trigger($data, $channel = 'notifications'){
         
         // check if we have a BaseNotification objects
         // so we can build the fullUrl attribute
@@ -70,7 +70,7 @@ class PusherService
         }
         
         // broadcast data
-        $this->pusher->trigger('my-channel', 'my-event', $data);
+        $this->pusher->trigger($channel, 'my-event', $data);
     }
 
     /**
