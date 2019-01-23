@@ -33,7 +33,7 @@ Of course you can find those details in your app in the dashboard.<br>
 
 ### Step 3:
 Now in your `view.html.twig` (your client side) add this:
-```javascript
+```
 {# Call NotificationsBundles's assets #}
 {{ notifications_assets() }}
 <script>
